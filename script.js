@@ -268,7 +268,18 @@ const app = {
     },
 
     formatCurrency: function(value) {
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        // Ensure it's a number, fix to 2 decimals
+        const num = Number(value);
+        if (isNaN(num)) return "0,00";
+        
+        // Convert to string with 2 decimals
+        const parts = num.toFixed(2).split('.');
+        
+        // Format integer part with spaces
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        
+        // Join with comma
+        return parts.join(',');
     },
 
     updateBalances: function() {
