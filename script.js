@@ -261,6 +261,40 @@ const app = {
         this.updateUI();
         alert('Saldo oppdatert!');
         this.goBack();
+    },
+
+    startLogin: function() {
+        document.getElementById('login-state-initial').classList.add('hidden');
+        const faceIdState = document.getElementById('login-state-faceid');
+        faceIdState.classList.remove('hidden');
+        
+        const icon = faceIdState.querySelector('.face-id-icon');
+        icon.classList.add('scanning');
+
+        setTimeout(() => {
+            // Success animation/transition
+            icon.innerText = 'check_circle';
+            icon.style.color = 'var(--accent-green)';
+            icon.classList.remove('scanning');
+            
+            setTimeout(() => {
+                 this.changeView('view-hjem');
+                 this.state.historyStack = []; // Clear history
+                 
+                 // Reset login screen for next time
+                 setTimeout(() => {
+                     document.getElementById('login-state-initial').classList.remove('hidden');
+                     faceIdState.classList.add('hidden');
+                     icon.innerText = 'face';
+                     icon.style.color = 'var(--primary-blue)';
+                 }, 500);
+            }, 500);
+        }, 1500);
+    },
+
+    logout: function() {
+        this.state.historyStack = [];
+        this.changeView('view-login');
     }
 };
 

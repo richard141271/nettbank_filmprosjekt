@@ -12,8 +12,31 @@
     <div class="app-container">
         <!-- Views -->
         <main id="view-container">
+            <!-- Login View -->
+            <section id="view-login" class="view active" style="z-index: 1000; background-color: var(--bg-color);">
+                <div class="content center-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                    <div class="logo-large" style="margin-bottom: 60px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="120" height="120">
+                            <path d="M150 350 L250 250 L350 350 L420 280 L250 110 L80 280 Z" fill="#ff5e5e"/>
+                            <path d="M250 250 L350 350 L420 280 L320 180 Z" fill="#ff4444"/>
+                        </svg>
+                    </div>
+                    
+                    <div id="login-state-initial">
+                        <button class="btn-primary" style="padding: 15px 40px; font-size: 18px; border-radius: 30px;" onclick="app.startLogin()">
+                            Logg inn
+                        </button>
+                    </div>
+
+                    <div id="login-state-faceid" class="hidden" style="display: flex; flex-direction: column; align-items: center;">
+                        <span class="material-icons-round face-id-icon" style="font-size: 64px; color: var(--primary-blue);">face</span>
+                        <p style="margin-top: 20px; font-size: 16px;">Gjenkjenner ansikt...</p>
+                    </div>
+                </div>
+            </section>
+
             <!-- Hjem View -->
-            <section id="view-hjem" class="view active">
+            <section id="view-hjem" class="view">
                 <header class="top-bar">
                     <div class="profile-icon"><span class="material-icons-round">person</span></div>
                     <h1>Hjem</h1>
@@ -234,7 +257,7 @@
                             <span class="icon"><span class="material-icons-round">settings</span></span>
                             <span class="text">Innstillinger</span>
                         </div>
-                        <div class="menu-item">
+                        <div class="menu-item" onclick="app.logout()">
                             <span class="icon"><span class="material-icons-round">logout</span></span>
                             <span class="text">Logg ut</span>
                         </div>
