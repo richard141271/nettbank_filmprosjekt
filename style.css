@@ -96,6 +96,9 @@ p { color: var(--text-gray); font-size: 14px; margin: 0; }
     align-items: center;
     justify-content: center;
     color: var(--text-white);
+    cursor: pointer;
+    z-index: 50;
+    position: relative;
 }
 
 /* --- Cards --- */

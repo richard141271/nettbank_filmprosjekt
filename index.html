@@ -299,20 +299,67 @@
             <!-- Bolig View (Placeholder) -->
             <section id="view-bolig" class="view">
                 <header class="top-bar">
+                    <div class="profile-icon" onclick="app.navigateTo('view-profile')"><span class="material-icons-round">person</span></div>
                     <h1>Bolig</h1>
+                    <div style="width: 40px;"></div>
                 </header>
-                <div class="content center-content">
-                    <p>Her kommer boliginformasjon</p>
+                <div class="content scrollable">
+                    <div class="card" style="background: linear-gradient(135deg, #2b3a55, #1c2235); min-height: 200px; display: flex; flex-direction: column; justify-content: flex-end;">
+                        <h2 style="font-size: 24px;">Din boligverdi</h2>
+                        <p style="font-size: 32px; color: white; font-weight: 700;">4 500 000 kr</p>
+                        <p style="margin-top: 10px;">Oppdatert i dag</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="section-header">
+                            <span>Lån</span>
+                        </div>
+                        <div class="account-card" style="padding: 10px 0; background: none;">
+                            <div class="account-icon" style="background-color: rgba(255, 255, 255, 0.1); color: white;">
+                                <span class="material-icons-round">home</span>
+                            </div>
+                            <div class="account-details">
+                                <h3>Boliglån</h3>
+                                <span class="subtext">2.45% nom. rente</span>
+                            </div>
+                            <div class="account-balance">
+                                <span class="amount">2 150 000</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
              <!-- Bulder View (Placeholder) -->
              <section id="view-bulder" class="view">
                 <header class="top-bar">
+                    <div class="profile-icon" onclick="app.navigateTo('view-profile')"><span class="material-icons-round">person</span></div>
                     <h1>Bulder</h1>
+                    <div style="width: 40px;"></div>
                 </header>
-                <div class="content center-content">
-                    <p>Bulder profil</p>
+                <div class="content scrollable">
+                    <div class="card center-content">
+                        <div class="logo-large" style="margin: 40px 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="80" height="80">
+                                <path d="M150 350 L250 250 L350 350 L420 280 L250 110 L80 280 Z" fill="#ff5e5e"/>
+                                <path d="M250 250 L350 350 L420 280 L320 180 Z" fill="#ff4444"/>
+                            </svg>
+                        </div>
+                        <h2>Hjelp og kontakt</h2>
+                        <p style="text-align: center; margin-top: 10px;">Trenger du hjelp? Vi er her for deg.</p>
+                        <button class="btn-primary" style="margin-top: 20px;">Chat med oss</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="menu-item">
+                            <span class="icon"><span class="material-icons-round">description</span></span>
+                            <span class="text">Dokumentarkiv</span>
+                        </div>
+                        <div class="menu-item">
+                            <span class="icon"><span class="material-icons-round">settings</span></span>
+                            <span class="text">Innstillinger</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -325,18 +372,18 @@
                 </header>
                 <div class="content scrollable">
                     <div class="card center-content" style="padding: 30px;">
-                        <div class="profile-icon" style="width: 80px; height: 80px; margin: 0 auto 20px auto;">
+                        <div class="profile-icon" style="width: 80px; height: 80px; margin: 0 auto 20px auto; font-size: 40px;">
                             <span class="material-icons-round" style="font-size: 40px;">person</span>
                         </div>
                         <h2>Filmcrew Bruker</h2>
                         <p>KundeID: 1234567</p>
                     </div>
 
-                    <div class="card">
+                    <div class="card" style="border: 2px solid var(--accent-red);">
                         <div class="section-header">
-                            <span>Film-modus Innstillinger</span>
+                            <span style="color: var(--accent-red); font-size: 18px; font-weight: bold;">ADMIN / FILM-MODUS</span>
                         </div>
-                        <p style="margin-bottom: 20px;">Her kan du justere saldo på kontoene for å matche scenen.</p>
+                        <p style="margin-bottom: 20px; color: white;">Endre saldo på kontoene her for å matche scenen:</p>
                         
                         <div class="input-group">
                             <label>Saldo: Visakort bulder</label>
@@ -348,7 +395,7 @@
                             <input type="number" id="admin-balance-2" value="1">
                         </div>
 
-                        <button class="btn-primary" style="width: 100%; padding: 15px;" onclick="app.updateBalances()">Oppdater Saldo</button>
+                        <button class="btn-primary" style="width: 100%; padding: 15px; background-color: var(--accent-red);" onclick="app.updateBalances()">Oppdater Saldo</button>
                     </div>
 
                     <div class="card">
