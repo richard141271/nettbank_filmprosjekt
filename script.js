@@ -254,6 +254,17 @@ const app = {
             const balanceEl = konto2Card.querySelector('.amount');
             balanceEl.innerText = this.formatCurrency(this.state.accounts['1'].balance);
         }
+
+        // Update Payment View Details (Fra/Til dropdowns)
+        const payFromEl = document.getElementById('pay-from-display');
+        if (payFromEl) {
+            // Reconstruct the text: "Name (Balance)"
+            payFromEl.innerText = `${this.state.accounts['21208'].name} (${this.formatCurrency(this.state.accounts['21208'].balance)})`;
+        }
+        const payToEl = document.getElementById('pay-to-display');
+        if (payToEl) {
+            payToEl.innerText = `${this.state.accounts['1'].name} (${this.formatCurrency(this.state.accounts['1'].balance)})`;
+        }
     },
 
     formatCurrency: function(value) {
