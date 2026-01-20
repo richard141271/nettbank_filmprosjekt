@@ -165,9 +165,14 @@ const app = {
     },
 
     processPayment: function() {
-        const fromAccount = document.getElementById('pay-from').value;
-        const amount = parseFloat(document.getElementById('pay-amount').value);
-        const toAccount = document.getElementById('pay-to').value;
+        // Use the large input for amount
+        const amountInput = document.getElementById('pay-amount-large');
+        const amount = parseFloat(amountInput.value.replace(/\s/g, '').replace(',', '.'));
+        
+        // Hardcoded for demo: From Visa (21208) to Spare (1) or vice versa?
+        // In the screenshot, "Fra Visakort" is shown.
+        const fromAccount = '21208';
+        const toAccount = '1'; // Or just "Sparekonto"
 
         if (!amount || amount <= 0) {
             alert('Vennligst oppgi et gyldig beløp');
@@ -179,47 +184,58 @@ const app = {
             return;
         }
 
-        // Simulate processing
-        const btn = document.querySelector('.btn-large-primary');
-        const originalText = btn.innerText;
-        btn.innerText = 'Behandler...';
-        btn.style.backgroundColor = '#4cd964'; // Green
+        // Deduct money
+        this.state.accounts[fromAccount].balance -= amount;
+        
+        // If sending to own account (Konto 2), add it there
+        if (this.state.accounts[toAccount]) {
+            this.state.accounts[toAccount].balance += amount;
+        }
+        
+        this.state.totalBalance = Object.values(this.state.accounts).reduce((sum, acc) => sum + acc.balance, 0);
+        
+        // Add fake transaction
+        this.state.accounts[fromAccount].transactions.unshift({
+            name: 'Sparekonto', // Hardcoded for this view
+            date: 'I dag',
+            amount: -amount,
+            reserved: false,
+            icon: 'savings'
+        });
 
-        setTimeout(() => {
-            // Deduct money
-            this.state.accounts[fromAccount].balance -= amount;
-            this.state.totalBalance -= amount;
-            
-            // Add fake transaction
-            this.state.accounts[fromAccount].transactions.unshift({
-                name: toAccount || 'Ukjent mottaker',
+        // Also add to receiving account if it exists
+        if (this.state.accounts[toAccount]) {
+             this.state.accounts[toAccount].transactions.unshift({
+                name: 'Fra Visakort',
                 date: 'I dag',
-                amount: -amount,
+                amount: amount,
                 reserved: false,
-                icon: 'payment'
+                icon: 'savings'
             });
+        }
 
-            // Update UI
-            this.updateUI();
-            
-            // Success state
-            btn.innerText = 'Betalt!';
-            
-            setTimeout(() => {
-                this.hidePaymentModal();
-                btn.innerText = originalText;
-                btn.style.backgroundColor = '';
-                document.getElementById('pay-amount').value = '';
-                document.getElementById('pay-to').value = '';
-                document.getElementById('pay-msg').value = '';
-                
-                // If we are in account view, refresh it
-                if (document.getElementById('view-account-details').classList.contains('active')) {
-                    this.openAccount(fromAccount); 
-                }
-            }, 1000);
+        // Update UI
+        this.updateUI();
+        
+        // Show Success View
+        this.navigateTo('view-pay-success');
+        
+        // Reset input
+        amountInput.value = '1';
 
+        // Trigger feedback modal after a short delay
+        setTimeout(() => {
+            document.getElementById('feedback-modal').classList.remove('hidden');
         }, 1500);
+    },
+
+    closeSuccess: function() {
+        // Go back to where we came from, or Home
+        this.changeView('view-hjem');
+    },
+
+    closeFeedback: function() {
+        document.getElementById('feedback-modal').classList.add('hidden');
     },
 
     updateUI: function() {
@@ -264,32 +280,17 @@ const app = {
     },
 
     startLogin: function() {
+        // No animation, immediate login
         document.getElementById('login-state-initial').classList.add('hidden');
-        const faceIdState = document.getElementById('login-state-faceid');
-        faceIdState.classList.remove('hidden');
         
-        const icon = faceIdState.querySelector('.face-id-icon');
-        icon.classList.add('scanning');
+        // Clear history and go to home
+        this.state.historyStack = [];
+        this.changeView('view-hjem');
 
+        // Reset login screen for next time (in case of logout)
         setTimeout(() => {
-            // Success animation/transition
-            icon.innerText = 'check_circle';
-            icon.style.color = 'var(--accent-green)';
-            icon.classList.remove('scanning');
-            
-            setTimeout(() => {
-                 this.changeView('view-hjem');
-                 this.state.historyStack = []; // Clear history
-                 
-                 // Reset login screen for next time
-                 setTimeout(() => {
-                     document.getElementById('login-state-initial').classList.remove('hidden');
-                     faceIdState.classList.add('hidden');
-                     icon.innerText = 'face';
-                     icon.style.color = 'var(--primary-blue)';
-                 }, 500);
-            }, 500);
-        }, 1500);
+             document.getElementById('login-state-initial').classList.remove('hidden');
+        }, 500);
     },
 
     logout: function() {

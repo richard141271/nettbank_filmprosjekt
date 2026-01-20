@@ -12,6 +12,97 @@
     <div class="app-container">
         <!-- Views -->
         <main id="view-container">
+            <!-- Pay Details View (Replaces generic modal) -->
+            <section id="view-pay-details" class="view">
+                <header class="top-bar">
+                    <button class="btn-icon" onclick="app.goBack()"><span class="material-icons-round">arrow_back</span></button>
+                    <h1>Betal</h1>
+                    <div class="camera-icon"><span class="material-icons-round">photo_camera</span></div>
+                </header>
+                <div class="content center-content" style="justify-content: flex-start; padding-top: 20px;">
+                    <div class="menu-group" style="width: 100%;">
+                        <div class="menu-item payment-row">
+                            <span class="label">Fra</span>
+                            <div class="value-group">
+                                <span class="value" id="pay-from-display">Visakort bulder (21 208,14)</span>
+                                <span class="material-icons-round arrow">chevron_right</span>
+                            </div>
+                        </div>
+                        <div class="menu-item payment-row">
+                            <span class="label">Til</span>
+                            <div class="value-group">
+                                <span class="value" id="pay-to-display">Sparekonto (521 182,00)</span>
+                                <span class="material-icons-round arrow">chevron_right</span>
+                            </div>
+                        </div>
+                        <div class="menu-item payment-row">
+                            <span class="label">Melding</span>
+                            <div class="value-group">
+                                <span class="value text-blue">Legg til</span>
+                                <span class="material-icons-round arrow text-blue">chevron_right</span>
+                            </div>
+                        </div>
+                        <div class="menu-item payment-row">
+                            <span class="label">Dato</span>
+                            <div class="value-group">
+                                <span class="value">I dag</span>
+                                <span class="material-icons-round arrow text-red">chevron_right</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="amount-input-container">
+                        <input type="number" id="pay-amount-large" value="1" class="big-amount-input">
+                        <span class="currency-label">kr</span>
+                    </div>
+
+                    <div class="pay-action-container">
+                        <button class="btn-swipe" onclick="app.processPayment()">
+                            <span class="material-icons-round">double_arrow</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pay Success View -->
+            <section id="view-pay-success" class="view geometric-bg">
+                <div class="content center-content" style="height: 100%; color: white;">
+                    <div class="success-icon-container">
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                        </svg>
+                    </div>
+                    <h1 style="font-size: 32px; margin-top: 20px;">Penger spart!</h1>
+                    <p style="color: rgba(255,255,255,0.6); margin-top: 10px;">Vi tar det herfra</p>
+
+                    <button class="btn-primary" style="margin-top: auto; margin-bottom: 40px; width: 200px; background-color: var(--primary-blue);" onclick="app.closeSuccess()">Lukk</button>
+                </div>
+
+                <!-- Feedback Modal -->
+                <div id="feedback-modal" class="modal-overlay hidden">
+                    <div class="modal-content-bottom">
+                        <button class="close-btn" onclick="app.closeFeedback()"><span class="material-icons-round">close</span></button>
+                        <h2>Hva synes du om appen?</h2>
+                        <p>Vi bygger Bulder for deg, med deg.</p>
+                        <div class="feedback-options">
+                            <div class="feedback-item">
+                                <span class="emoji">😞</span>
+                                <span>Misfornøyd</span>
+                            </div>
+                            <div class="feedback-item">
+                                <span class="emoji">😐</span>
+                                <span>Nøytral</span>
+                            </div>
+                            <div class="feedback-item">
+                                <span class="emoji">😁</span>
+                                <span>Fornøyd</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Login View -->
             <section id="view-login" class="view active" style="z-index: 1000; background-color: var(--bg-color);">
                 <div class="content center-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
@@ -22,23 +113,31 @@
                         </svg>
                     </div>
                     
-                    <div id="login-state-initial">
-                        <button class="btn-primary" style="padding: 15px 40px; font-size: 18px; border-radius: 30px;" onclick="app.startLogin()">
+                    <div id="login-state-initial" style="width: 100%; max-width: 320px; padding: 0 20px;">
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <label style="display:block; color: #a0a4b0; margin-bottom: 8px; font-size: 14px;">Mobilnummer • Fødselsnr.</label>
+                            <input type="tel" value="" placeholder="12345678" style="width: 100%; padding: 15px; border-radius: 12px; background: #1c2235; border: 1px solid #2b3a55; color: white; font-size: 16px; outline: none;">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 30px;">
+                            <label style="display:block; color: #a0a4b0; margin-bottom: 8px; font-size: 14px;">Passord</label>
+                            <input type="password" value="" placeholder="••••••" style="width: 100%; padding: 15px; border-radius: 12px; background: #1c2235; border: 1px solid #2b3a55; color: white; font-size: 16px; outline: none;">
+                        </div>
+                        <button class="btn-primary" style="width: 100%; padding: 15px; font-size: 18px; border-radius: 30px; margin-top: 10px;" onclick="app.startLogin()">
                             Logg inn
                         </button>
+                        <div style="text-align: center; margin-top: 25px;">
+                            <span style="color: var(--primary-blue); font-weight: 500;">Bli kunde</span>
+                        </div>
                     </div>
 
-                    <div id="login-state-faceid" class="hidden" style="display: flex; flex-direction: column; align-items: center;">
-                        <span class="material-icons-round face-id-icon" style="font-size: 64px; color: var(--primary-blue);">face</span>
-                        <p style="margin-top: 20px; font-size: 16px;">Gjenkjenner ansikt...</p>
-                    </div>
+                    <!-- FaceID Removed per user request -->
                 </div>
             </section>
 
             <!-- Hjem View -->
             <section id="view-hjem" class="view">
                 <header class="top-bar">
-                    <div class="profile-icon"><span class="material-icons-round">person</span></div>
+                    <div class="profile-icon" onclick="app.navigateTo('view-profile')"><span class="material-icons-round">person</span></div>
                     <h1>Hjem</h1>
                     <div class="search-icon"><span class="material-icons-round">search</span></div>
                 </header>
@@ -100,7 +199,7 @@
             <!-- Spare View -->
             <section id="view-spare" class="view">
                 <header class="top-bar">
-                    <div class="profile-icon"><span class="material-icons-round">person</span></div>
+                    <div class="profile-icon" onclick="app.navigateTo('view-profile')"><span class="material-icons-round">person</span></div>
                     <h1>Spare</h1>
                     <div class="add-icon"><span class="material-icons-round">add</span></div>
                 </header>
@@ -149,13 +248,13 @@
             <!-- Betale View -->
             <section id="view-betale" class="view">
                 <header class="top-bar">
-                    <div class="profile-icon"><span class="material-icons-round">person</span></div>
+                    <div class="profile-icon" onclick="app.navigateTo('view-profile')"><span class="material-icons-round">person</span></div>
                     <h1>Betale</h1>
                     <div class="camera-icon"><span class="material-icons-round">photo_camera</span></div>
                 </header>
                 <div class="content scrollable">
                     <div class="menu-group">
-                        <div class="menu-item" onclick="app.showPaymentModal()">
+                        <div class="menu-item" onclick="app.navigateTo('view-pay-details')">
                             <span class="icon"><span class="material-icons-round" style="transform: rotate(-45deg);">send</span></span>
                             <span class="text">Betale og overføre</span>
                         </div>
