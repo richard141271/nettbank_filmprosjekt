@@ -32,7 +32,7 @@
                         <span class="material-icons-round">arrow_forward</span>
                     </div>
 
-                    <div class="card account-card">
+                    <div class="card account-card" onclick="app.openAccount('21208')">
                         <div class="account-icon red-icon">
                             <span class="material-icons-round">credit_card</span>
                         </div>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
 
-                    <div class="card account-card">
+                    <div class="card account-card" onclick="app.openAccount('1')">
                         <div class="account-icon red-icon">
                             <span class="material-icons-round">account_balance_wallet</span>
                         </div>
@@ -151,14 +151,14 @@
                             <span class="icon bold">A</span>
                             <span class="text">AvtaleGiro</span>
                         </div>
-                        <div class="menu-item" onclick="app.showForfall()">
+                        <div class="menu-item" onclick="app.navigateTo('view-forfall')">
                             <span class="icon"><span class="material-icons-round">event_note</span></span>
                             <span class="text">Forfallsoversikt</span>
                         </div>
                     </div>
 
                     <div class="menu-group">
-                        <div class="menu-item" onclick="app.showFasteOppdrag()">
+                        <div class="menu-item" onclick="app.navigateTo('view-faste-oppdrag')">
                             <span class="icon"><span class="material-icons-round" style="transform: rotate(-45deg);">call_made</span></span>
                             <span class="text">Faste oppdrag</span>
                         </div>
@@ -166,7 +166,7 @@
                             <span class="icon"><span class="material-icons-round" style="transform: rotate(-45deg);">call_made</span></span>
                             <span class="text">Abonnement</span>
                         </div>
-                        <div class="menu-item" onclick="app.showMottakere()">
+                        <div class="menu-item" onclick="app.navigateTo('view-mottakere')">
                             <span class="icon"><span class="material-icons-round">contact_page</span></span>
                             <span class="text">Mottakere</span>
                         </div>
@@ -191,6 +191,230 @@
                 </header>
                 <div class="content center-content">
                     <p>Bulder profil</p>
+                </div>
+            </section>
+
+            <!-- Profile/Admin View -->
+            <section id="view-profile" class="view">
+                <header class="top-bar">
+                    <button class="btn-icon" onclick="app.goBack()"><span class="material-icons-round">arrow_back</span></button>
+                    <h1>Profil</h1>
+                    <div style="width: 40px;"></div>
+                </header>
+                <div class="content scrollable">
+                    <div class="card center-content" style="padding: 30px;">
+                        <div class="profile-icon" style="width: 80px; height: 80px; margin: 0 auto 20px auto;">
+                            <span class="material-icons-round" style="font-size: 40px;">person</span>
+                        </div>
+                        <h2>Filmcrew Bruker</h2>
+                        <p>KundeID: 1234567</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-header">
+                            <span>Film-modus Innstillinger</span>
+                        </div>
+                        <p style="margin-bottom: 20px;">Her kan du justere saldo på kontoene for å matche scenen.</p>
+                        
+                        <div class="input-group">
+                            <label>Saldo: Visakort bulder</label>
+                            <input type="number" id="admin-balance-1" value="21208">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Saldo: Konto 2</label>
+                            <input type="number" id="admin-balance-2" value="1">
+                        </div>
+
+                        <button class="btn-primary" style="width: 100%; padding: 15px;" onclick="app.updateBalances()">Oppdater Saldo</button>
+                    </div>
+
+                    <div class="card">
+                         <div class="menu-item">
+                            <span class="icon"><span class="material-icons-round">settings</span></span>
+                            <span class="text">Innstillinger</span>
+                        </div>
+                        <div class="menu-item">
+                            <span class="icon"><span class="material-icons-round">logout</span></span>
+                            <span class="text">Logg ut</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Forfallsoversikt View -->
+            <section id="view-forfall" class="view">
+                <header class="top-bar">
+                    <button class="btn-icon" onclick="app.goBack()"><span class="material-icons-round">arrow_back</span></button>
+                    <h1>Forfallsoversikt</h1>
+                    <div style="width: 40px;"></div>
+                </header>
+                <div class="content scrollable">
+                    <div class="card">
+                        <div class="section-header">
+                            <span>I dag</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div style="display:flex; flex-direction:column;">
+                                <span style="font-weight:500;">Netflix</span>
+                                <span class="subtext">Fra Visakort bulder</span>
+                            </div>
+                            <span class="red-text">-159 kr</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="section-header">
+                            <span>20.02.2024</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 10px 0;">
+                            <div style="display:flex; flex-direction:column;">
+                                <span style="font-weight:500;">Husleie</span>
+                                <span class="subtext">Fra Visakort bulder</span>
+                            </div>
+                            <span class="red-text">-8 500 kr</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Faste Oppdrag View -->
+            <section id="view-faste-oppdrag" class="view">
+                <header class="top-bar">
+                    <button class="btn-icon" onclick="app.goBack()"><span class="material-icons-round">arrow_back</span></button>
+                    <h1>Faste oppdrag</h1>
+                    <div class="add-icon"><span class="material-icons-round">add</span></div>
+                </header>
+                <div class="content scrollable">
+                    <div class="card">
+                        <div style="display:flex; align-items:center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <div class="account-icon" style="background: rgba(255,255,255,0.1); color: white; margin-right: 15px;">
+                                <span class="material-icons-round">home</span>
+                            </div>
+                            <div>
+                                <h3>Husleie</h3>
+                                <p>8 500 kr - Den 20. hver måned</p>
+                            </div>
+                        </div>
+                         <div style="display:flex; align-items:center; padding: 10px 0;">
+                            <div class="account-icon" style="background: rgba(255,255,255,0.1); color: white; margin-right: 15px;">
+                                <span class="material-icons-round">savings</span>
+                            </div>
+                            <div>
+                                <h3>Sparing</h3>
+                                <p>2 000 kr - Den 12. hver måned</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mottakere View -->
+            <section id="view-mottakere" class="view">
+                <header class="top-bar">
+                    <button class="btn-icon" onclick="app.goBack()"><span class="material-icons-round">arrow_back</span></button>
+                    <h1>Mottakere</h1>
+                    <div class="add-icon"><span class="material-icons-round">add</span></div>
+                </header>
+                <div class="content scrollable">
+                    <div class="input-group">
+                        <input type="text" placeholder="Søk etter mottaker" style="padding: 12px; font-size: 16px;">
+                    </div>
+                    <div class="card" style="padding: 0;">
+                        <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center;">
+                            <span class="material-icons-round" style="margin-right:15px; background:rgba(255,255,255,0.1); padding:8px; border-radius:50%;">person</span>
+                            <span style="font-size:16px;">Mamma</span>
+                        </div>
+                        <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center;">
+                            <span class="material-icons-round" style="margin-right:15px; background:rgba(255,255,255,0.1); padding:8px; border-radius:50%;">person</span>
+                            <span style="font-size:16px;">Pappa</span>
+                        </div>
+                        <div style="padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display:flex; align-items:center;">
+                            <span class="material-icons-round" style="margin-right:15px; background:rgba(255,255,255,0.1); padding:8px; border-radius:50%;">home_work</span>
+                            <span style="font-size:16px;">Huseier</span>
+                        </div>
+                        <div style="padding: 20px; display:flex; align-items:center;">
+                            <span class="material-icons-round" style="margin-right:15px; background:rgba(255,255,255,0.1); padding:8px; border-radius:50%;">electric_bolt</span>
+                            <span style="font-size:16px;">Strømleverandør AS</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Account Detail View -->
+            <section id="view-account-details" class="view" style="z-index: 50;">
+                <header class="top-bar">
+                    <button class="btn-icon" onclick="app.goBack()"><span class="material-icons-round">arrow_back</span></button>
+                    <div class="search-icon"><span class="material-icons-round">search</span></div>
+                </header>
+                <div class="content scrollable">
+                    <div class="account-header-details">
+                        <h2 id="acc-detail-name">Visakort bulder</h2>
+                        <span class="subtext" id="acc-detail-id">3610.71.65864</span>
+                        <div class="acc-balance-large">
+                            <span id="acc-detail-balance">21 208</span> <span class="currency">kr</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons-row">
+                        <div class="action-btn" onclick="app.showPaymentModal()">
+                            <div class="icon-circle"><span class="material-icons-round" style="transform: rotate(-45deg);">send</span></div>
+                            <span>Betale</span>
+                        </div>
+                        <div class="action-btn">
+                            <div class="icon-circle"><span class="material-icons-round">search</span></div>
+                            <span>Søk</span>
+                        </div>
+                        <div class="action-btn">
+                            <div class="icon-circle"><span class="material-icons-round">more_horiz</span></div>
+                            <span>Mer</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-history-controls">
+                        <button class="btn-pill active"><span class="material-icons-round">arrow_left</span> Historikk</button>
+                        <button class="btn-pill">Fremover <span class="material-icons-round">arrow_right</span></button>
+                    </div>
+
+                    <div class="transaction-list">
+                        <div class="month-header">
+                            <span>JANUAR</span>
+                            <span>+611</span>
+                        </div>
+                        
+                        <div class="transaction-item">
+                            <div class="trans-icon"><span class="material-icons-round">local_parking</span></div>
+                            <div class="trans-info">
+                                <h4>EasyPark</h4>
+                                <span class="subtext">I dag 06:02</span>
+                            </div>
+                            <div class="trans-amount">
+                                <span class="negative">-74</span>
+                                <span class="status-tag">Reservert</span>
+                            </div>
+                        </div>
+
+                        <div class="transaction-item">
+                            <div class="trans-icon"><span class="material-icons-round">savings</span></div>
+                            <div class="trans-info">
+                                <h4>Til Sparekonto BB</h4>
+                                <span class="subtext">I går</span>
+                            </div>
+                            <div class="trans-amount">
+                                <span class="negative">-2 000</span>
+                            </div>
+                        </div>
+
+                        <div class="transaction-item">
+                            <div class="trans-icon"><span class="material-icons-round">savings</span></div>
+                            <div class="trans-info">
+                                <h4>Til Sparekonto BB</h4>
+                                <span class="subtext">I går</span>
+                            </div>
+                            <div class="trans-amount">
+                                <span class="negative">-1 200</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -225,18 +449,6 @@
                 </div>
             </div>
             
-            <!-- Generic Page Modal -->
-            <div id="generic-modal" class="modal hidden">
-                <div class="modal-header">
-                    <button class="btn-icon" onclick="app.hideGenericModal()"><span class="material-icons-round">arrow_back</span></button>
-                    <h2 id="generic-title">Tittel</h2>
-                    <div style="width: 24px;"></div>
-                </div>
-                <div class="modal-content" id="generic-content">
-                    <!-- Dynamic content -->
-                </div>
-            </div>
-
         </main>
 
         <!-- Bottom Navigation -->

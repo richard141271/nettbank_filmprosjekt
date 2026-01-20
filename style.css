@@ -348,6 +348,143 @@ p { color: var(--text-gray); font-size: 14px; margin: 0; }
     color: var(--accent-red);
 }
 
+/* --- Account Detail View --- */
+.account-header-details {
+    padding: 20px 0;
+}
+
+.account-header-details h2 {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.acc-balance-large {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+.acc-balance-large .currency {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.action-buttons-row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.action-btn .icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.transaction-history-controls {
+    display: flex;
+    justify-content: center;
+    background-color: var(--card-bg);
+    border-radius: 25px;
+    padding: 4px;
+    margin-bottom: 30px;
+}
+
+.btn-pill {
+    background: none;
+    border: none;
+    color: var(--text-gray);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+}
+
+.btn-pill.active {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.transaction-list {
+    padding-bottom: 100px;
+}
+
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-gray);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.trans-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+}
+
+.trans-info {
+    flex: 1;
+}
+
+.trans-info h4 {
+    margin: 0 0 4px 0;
+    font-weight: 500;
+}
+
+.trans-amount {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.trans-amount .negative {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.status-tag {
+    background-color: rgba(255,255,255,0.1);
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 4px;
+    color: var(--text-gray);
+}
+
 /* --- Modals --- */
 .modal {
     position: fixed;
