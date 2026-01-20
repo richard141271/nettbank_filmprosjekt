@@ -42,14 +42,14 @@
                             <span class="material-icons-round arrow text-blue">chevron_right</span>
                         </div>
                     </div>
-                    <div class="menu-item payment-row" onclick="app.openDateInput()">
+                    <div class="menu-item payment-row" style="position: relative;">
                         <span class="label">Dato</span>
                         <div class="value-group">
                             <span class="value" id="pay-date-display">I dag</span>
                             <span class="material-icons-round arrow text-red">chevron_right</span>
                         </div>
+                        <input type="date" id="date-input-overlay" onchange="app.handleDateChange(this)" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 10;">
                     </div>
-                    <input type="date" id="hidden-date-input" style="position: absolute; opacity: 0; pointer-events: none;">
                 </div>
 
                 <div class="amount-input-container">
@@ -622,6 +622,39 @@
             <div id="account-selector-list" style="text-align: left;">
                 <!-- Populated by JS -->
             </div>
+            <!-- Add New Recipient Option -->
+            <div id="new-recipient-option" class="account-selector-item hidden" onclick="app.openNewRecipientModal()" style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px; padding-top: 15px;">
+                 <div style="display: flex; align-items: center;">
+                    <div class="icon-circle small" style="margin-right: 15px; background: rgba(255,255,255,0.1);"><span class="material-icons-round">add</span></div>
+                    <span class="acc-name">Ny mottaker</span>
+                </div>
+                <span class="material-icons-round text-gray">chevron_right</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Recipient Modal -->
+    <div id="new-recipient-modal" class="modal-overlay hidden">
+        <div class="modal-content-bottom">
+            <button class="close-btn" onclick="app.closeNewRecipientModal()"><span class="material-icons-round">close</span></button>
+            <h3 style="margin-bottom: 20px; color: var(--text-white);">Ny mottaker</h3>
+            <div class="input-group">
+                <label style="color: #a0a4b0; font-size: 14px; margin-bottom: 8px; display: block;">Navn</label>
+                <input type="text" id="new-recipient-name" placeholder="F.eks. Rørlegger AS" style="width: 100%; padding: 15px; background: #1c2235; border: 1px solid #2b3a55; border-radius: 12px; color: white; font-size: 16px; outline: none;">
+            </div>
+            <button class="btn-primary" style="margin-top: 20px;" onclick="app.confirmNewRecipient()">Bruk mottaker</button>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="modal-overlay hidden">
+        <div class="modal-content-bottom">
+            <button class="close-btn" onclick="app.closeMessageModal()"><span class="material-icons-round">close</span></button>
+            <h3 style="margin-bottom: 20px; color: var(--text-white);">Melding</h3>
+            <div class="input-group">
+                <input type="text" id="payment-message-input" placeholder="Skriv melding..." style="width: 100%; padding: 15px; background: #1c2235; border: 1px solid #2b3a55; border-radius: 12px; color: white; font-size: 16px; outline: none;">
+            </div>
+            <button class="btn-primary" style="margin-top: 20px;" onclick="app.confirmMessage()">Lagre</button>
         </div>
     </div>
 

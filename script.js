@@ -48,6 +48,7 @@ const app = {
         paymentState: {
             fromAccount: '21208',
             toAccount: '1',
+            toAccountName: '',
             message: '',
             date: 'I dag'
         }
@@ -234,36 +235,37 @@ const app = {
     },
 
     openMessageInput: function() {
-        const msg = prompt("Skriv inn melding eller KID:", this.state.paymentState.message);
-        if (msg !== null) {
-            this.state.paymentState.message = msg;
+         document.getElementById('message-modal').classList.remove('hidden');
+         document.getElementById('payment-message-input').value = this.state.paymentState.message;
+         setTimeout(() => document.getElementById('payment-message-input').focus(), 100);
+    },
+
+    closeMessageModal: function() {
+        document.getElementById('message-modal').classList.add('hidden');
+    },
+
+    confirmMessage: function() {
+        const msg = document.getElementById('payment-message-input').value;
+        this.state.paymentState.message = msg;
+        this.updateUI();
+        this.closeMessageModal();
+    },
+
+    handleDateChange: function(input) {
+        if (input.value) {
+            // Format date to DD.MM.YYYY
+            const parts = input.value.split('-');
+            if (parts.length === 3) {
+                 this.state.paymentState.date = `${parts[2]}.${parts[1]}.${parts[0]}`;
+            } else {
+                this.state.paymentState.date = input.value;
+            }
             this.updateUI();
         }
     },
 
     openDateInput: function() {
-        const dateInput = document.getElementById('hidden-date-input');
-        
-        // Handle change
-        dateInput.onchange = (e) => {
-            if (e.target.value) {
-                // Format date to DD.MM.YYYY
-                const parts = e.target.value.split('-');
-                if (parts.length === 3) {
-                     this.state.paymentState.date = `${parts[2]}.${parts[1]}.${parts[0]}`;
-                } else {
-                    this.state.paymentState.date = e.target.value;
-                }
-                this.updateUI();
-            }
-        };
-        
-        // Trigger click using showPicker if available (modern browsers) or focus/click hack
-        try {
-            dateInput.showPicker();
-        } catch (err) {
-            dateInput.click();
-        }
+         // No-op, handled by overlay input
     },
 
     processPayment: function() {
@@ -287,24 +289,14 @@ const app = {
         // Deduct money
         this.state.accounts[fromAccount].balance -= amount;
         
-        // If sending to own account (Konto 2), add it there
+        let recipientName = 'Betaling';
+
+        // If sending to internal account, add it there
         if (this.state.accounts[toAccount]) {
             this.state.accounts[toAccount].balance += amount;
-        }
-        
-        this.calculateTotalBalance();
-        
-        // Add fake transaction
-        this.state.accounts[fromAccount].transactions.unshift({
-            name: this.state.accounts[toAccount] ? this.state.accounts[toAccount].name : 'Betaling',
-            date: this.state.paymentState.date,
-            amount: -amount,
-            reserved: false,
-            icon: 'savings'
-        });
+            recipientName = this.state.accounts[toAccount].name;
 
-        // Also add to receiving account if it exists
-        if (this.state.accounts[toAccount]) {
+            // Add transaction to recipient
              this.state.accounts[toAccount].transactions.unshift({
                 name: 'Fra ' + this.state.accounts[fromAccount].name,
                 date: this.state.paymentState.date,
@@ -312,7 +304,20 @@ const app = {
                 reserved: false,
                 icon: 'savings'
             });
+        } else if (this.state.paymentState.toAccount === 'external') {
+            recipientName = this.state.paymentState.toAccountName;
         }
+        
+        this.calculateTotalBalance();
+        
+        // Add transaction for sender
+        this.state.accounts[fromAccount].transactions.unshift({
+            name: recipientName,
+            date: this.state.paymentState.date,
+            amount: -amount,
+            reserved: false,
+            icon: 'savings'
+        });
 
         // Update UI
         this.saveState();
@@ -401,8 +406,12 @@ const app = {
         }
         
         const payToEl = document.getElementById('pay-to-display');
-        if (payToEl && toAcc) {
-            payToEl.innerText = `${toAcc.name} (${this.formatCurrency(toAcc.balance)})`;
+        if (payToEl) {
+             if (toAcc) {
+                payToEl.innerText = `${toAcc.name} (${this.formatCurrency(toAcc.balance)})`;
+             } else if (this.state.paymentState.toAccount === 'external') {
+                 payToEl.innerText = this.state.paymentState.toAccountName;
+             }
         }
         
         // Update Message and Date
@@ -428,9 +437,6 @@ const app = {
         Object.keys(this.state.accounts).forEach(accId => {
             const acc = this.state.accounts[accId];
             
-            // Optional: Don't show same account in 'to' if selected in 'from'
-            // But for simplicity and self-transfer, we allow it, but maybe visually distinguish?
-            
             const item = document.createElement('div');
             item.className = 'account-selector-item';
             item.innerHTML = `
@@ -446,6 +452,14 @@ const app = {
             list.appendChild(item);
         });
 
+        // Show/Hide "New Recipient" option
+        const newRecipientOption = document.getElementById('new-recipient-option');
+        if (this.selectorType === 'to') {
+            newRecipientOption.classList.remove('hidden');
+        } else {
+            newRecipientOption.classList.add('hidden');
+        }
+
         document.getElementById('account-selector-modal').classList.remove('hidden');
     },
 
@@ -459,9 +473,30 @@ const app = {
             this.state.paymentState.fromAccount = accId;
         } else {
             this.state.paymentState.toAccount = accId;
+            this.state.paymentState.toAccountName = ''; // Reset external name if internal selected
         }
         this.updateUI();
         this.closeAccountSelector();
+    },
+
+    openNewRecipientModal: function() {
+        document.getElementById('new-recipient-modal').classList.remove('hidden');
+        document.getElementById('new-recipient-name').focus();
+    },
+
+    closeNewRecipientModal: function() {
+        document.getElementById('new-recipient-modal').classList.add('hidden');
+    },
+
+    confirmNewRecipient: function() {
+        const name = document.getElementById('new-recipient-name').value;
+        if (name) {
+            this.state.paymentState.toAccount = 'external';
+            this.state.paymentState.toAccountName = name;
+            this.updateUI();
+            this.closeNewRecipientModal();
+            this.closeAccountSelector();
+        }
     },
 
     formatCurrency: function(value) {
