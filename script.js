@@ -343,17 +343,52 @@ const app = {
         // Update total balance
         document.getElementById('total-balance').innerText = this.formatCurrency(this.state.totalBalance);
 
-        // Update specific account cards (hardcoded selection for this demo)
+        // Update Account Cards (Hjem View)
+        // Note: This relies on fixed indices, which is brittle but works for now
         const visaCard = document.querySelector('.account-card:nth-of-type(3)'); // Visakort
         if (visaCard) {
             const balanceEl = visaCard.querySelector('.amount');
-            balanceEl.innerText = this.formatCurrency(this.state.accounts['21208'].balance);
+            if (balanceEl) balanceEl.innerText = this.formatCurrency(this.state.accounts['21208'].balance);
         }
 
         const konto2Card = document.querySelector('.account-card:nth-of-type(4)'); // Konto 2
         if (konto2Card) {
             const balanceEl = konto2Card.querySelector('.amount');
-            balanceEl.innerText = this.formatCurrency(this.state.accounts['1'].balance);
+            if (balanceEl) balanceEl.innerText = this.formatCurrency(this.state.accounts['1'].balance);
+        }
+
+        // Update Savings View
+        // Update Total Saved
+        const totalSavedEl = document.querySelector('.total-saved .amount-large');
+        if (totalSavedEl) {
+             const totalSaved = this.state.accounts['2'].balance + this.state.accounts['3'].balance; // Sparekonto + Buffer (Husleie)
+             totalSavedEl.innerText = this.formatCurrency(totalSaved).split(',')[0]; // Show whole number for aesthetic
+        }
+        
+        const savingsSummaryEl = document.querySelector('.savings-summary .summary-right span:first-child');
+        if (savingsSummaryEl) {
+             const totalSaved = this.state.accounts['2'].balance + this.state.accounts['3'].balance;
+             savingsSummaryEl.innerText = this.formatCurrency(totalSaved).split(',')[0];
+        }
+
+        // Update Sparekonto Card
+        const spareCard = document.querySelector('.savings-card:nth-of-type(1)');
+        if (spareCard) {
+            const progressSpan = spareCard.querySelector('.savings-progress span:first-child');
+            if (progressSpan) {
+                // Assuming goal is 550 000
+                progressSpan.innerText = `${this.formatCurrency(this.state.accounts['2'].balance).split(',')[0]} / 550 000 kr`;
+            }
+        }
+
+        // Update Husleie (Buffer) Card
+        const husleieCard = document.querySelector('.savings-card:nth-of-type(2)');
+        if (husleieCard) {
+            const progressSpan = husleieCard.querySelector('.savings-progress span:first-child');
+            if (progressSpan) {
+                // Assuming goal is 100 000
+                progressSpan.innerText = `${this.formatCurrency(this.state.accounts['3'].balance).split(',')[0]} / 100 000 kr`;
+            }
         }
 
         // Update Payment View Details (Fra/Til dropdowns)
