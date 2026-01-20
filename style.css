@@ -352,6 +352,9 @@ p { color: var(--text-gray); font-size: 14px; margin: 0; }
     align-items: center;
     margin-top: 40px;
     margin-bottom: auto;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .big-amount-input {
@@ -361,7 +364,8 @@ p { color: var(--text-gray); font-size: 14px; margin: 0; }
     font-size: 64px;
     font-weight: 700;
     text-align: right;
-    width: 250px; /* Increased width */
+    flex: 1;
+    min-width: 0;
     outline: none;
     -moz-appearance: textfield; /* Firefox remove spinner */
 }

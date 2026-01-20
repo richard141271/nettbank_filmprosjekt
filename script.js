@@ -44,16 +44,44 @@ const app = {
         },
         totalBalance: 0, // Will be calculated
         historyStack: [], // To track navigation
+        activeAccountId: null, // Currently viewed account
         paymentState: {
             fromAccount: '21208',
-            toAccount: '1'
+            toAccount: '1',
+            message: '',
+            date: 'I dag'
         }
     },
 
     init: function() {
+        this.loadState();
         this.calculateTotalBalance();
         this.setupNavigation();
         this.updateUI();
+    },
+
+    loadState: function() {
+        const saved = localStorage.getItem('nettbankState');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.accounts) {
+                    this.state.accounts = parsed.accounts;
+                }
+            } catch (e) {
+                console.error("Failed to load state", e);
+            }
+        }
+    },
+
+    saveState: function() {
+        try {
+            localStorage.setItem('nettbankState', JSON.stringify({
+                accounts: this.state.accounts
+            }));
+        } catch (e) {
+            console.error("Failed to save state", e);
+        }
     },
 
     calculateTotalBalance: function() {
@@ -83,6 +111,8 @@ const app = {
     openAccount: function(accountId) {
         const account = this.state.accounts[accountId];
         if (!account) return;
+
+        this.state.activeAccountId = accountId;
 
         // Update Account Detail View
         document.getElementById('acc-detail-name').innerText = account.name;
@@ -183,12 +213,57 @@ const app = {
         }
     },
 
-    showPaymentModal: function() {
-        document.getElementById('payment-modal').classList.remove('hidden');
+    startPaymentFromActiveAccount: function() {
+        if (this.state.activeAccountId) {
+            this.state.paymentState.fromAccount = this.state.activeAccountId;
+            
+            // Try to find a logical 'to' account (not the same as from)
+            const accountIds = Object.keys(this.state.accounts);
+            const otherAccount = accountIds.find(id => id !== this.state.activeAccountId);
+            if (otherAccount) {
+                this.state.paymentState.toAccount = otherAccount;
+            }
+        }
+        
+        // Reset message and date
+        this.state.paymentState.message = '';
+        this.state.paymentState.date = 'I dag';
+        
+        this.updateUI();
+        this.navigateTo('view-pay-details');
     },
 
-    hidePaymentModal: function() {
-        document.getElementById('payment-modal').classList.add('hidden');
+    openMessageInput: function() {
+        const msg = prompt("Skriv inn melding eller KID:", this.state.paymentState.message);
+        if (msg !== null) {
+            this.state.paymentState.message = msg;
+            this.updateUI();
+        }
+    },
+
+    openDateInput: function() {
+        const dateInput = document.getElementById('hidden-date-input');
+        
+        // Handle change
+        dateInput.onchange = (e) => {
+            if (e.target.value) {
+                // Format date to DD.MM.YYYY
+                const parts = e.target.value.split('-');
+                if (parts.length === 3) {
+                     this.state.paymentState.date = `${parts[2]}.${parts[1]}.${parts[0]}`;
+                } else {
+                    this.state.paymentState.date = e.target.value;
+                }
+                this.updateUI();
+            }
+        };
+        
+        // Trigger click using showPicker if available (modern browsers) or focus/click hack
+        try {
+            dateInput.showPicker();
+        } catch (err) {
+            dateInput.click();
+        }
     },
 
     processPayment: function() {
@@ -222,7 +297,7 @@ const app = {
         // Add fake transaction
         this.state.accounts[fromAccount].transactions.unshift({
             name: this.state.accounts[toAccount] ? this.state.accounts[toAccount].name : 'Betaling',
-            date: 'I dag',
+            date: this.state.paymentState.date,
             amount: -amount,
             reserved: false,
             icon: 'savings'
@@ -232,7 +307,7 @@ const app = {
         if (this.state.accounts[toAccount]) {
              this.state.accounts[toAccount].transactions.unshift({
                 name: 'Fra ' + this.state.accounts[fromAccount].name,
-                date: 'I dag',
+                date: this.state.paymentState.date,
                 amount: amount,
                 reserved: false,
                 icon: 'savings'
@@ -240,6 +315,7 @@ const app = {
         }
 
         // Update UI
+        this.saveState();
         this.updateUI();
         
         // Show Success View
@@ -292,6 +368,19 @@ const app = {
         const payToEl = document.getElementById('pay-to-display');
         if (payToEl && toAcc) {
             payToEl.innerText = `${toAcc.name} (${this.formatCurrency(toAcc.balance)})`;
+        }
+        
+        // Update Message and Date
+        const msgEl = document.getElementById('pay-msg-display');
+        if (msgEl) {
+            msgEl.innerText = this.state.paymentState.message || 'Legg til';
+            // Change color if set
+            msgEl.className = this.state.paymentState.message ? 'value' : 'value text-blue';
+        }
+
+        const dateEl = document.getElementById('pay-date-display');
+        if (dateEl) {
+            dateEl.innerText = this.state.paymentState.date || 'I dag';
         }
     },
 
@@ -369,6 +458,7 @@ const app = {
         // Update Total Balance (simple sum for now)
         this.state.totalBalance = (this.state.accounts['21208'].balance + this.state.accounts['1'].balance);
 
+        this.saveState();
         this.updateUI();
         alert('Saldo oppdatert!');
         this.goBack();

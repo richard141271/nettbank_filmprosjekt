@@ -35,23 +35,24 @@
                             <span class="material-icons-round arrow">chevron_right</span>
                         </div>
                     </div>
-                    <div class="menu-item payment-row">
-                            <span class="label">Melding</span>
-                            <div class="value-group">
-                                <span class="value text-blue">Legg til</span>
-                                <span class="material-icons-round arrow text-blue">chevron_right</span>
-                            </div>
-                        </div>
-                        <div class="menu-item payment-row">
-                            <span class="label">Dato</span>
-                            <div class="value-group">
-                                <span class="value">I dag</span>
-                                <span class="material-icons-round arrow text-red">chevron_right</span>
-                            </div>
+                    <div class="menu-item payment-row" onclick="app.openMessageInput()">
+                        <span class="label">Melding</span>
+                        <div class="value-group">
+                            <span class="value text-blue" id="pay-msg-display">Legg til</span>
+                            <span class="material-icons-round arrow text-blue">chevron_right</span>
                         </div>
                     </div>
+                    <div class="menu-item payment-row" onclick="app.openDateInput()">
+                        <span class="label">Dato</span>
+                        <div class="value-group">
+                            <span class="value" id="pay-date-display">I dag</span>
+                            <span class="material-icons-round arrow text-red">chevron_right</span>
+                        </div>
+                    </div>
+                    <input type="date" id="hidden-date-input" style="position: absolute; opacity: 0; pointer-events: none;">
+                </div>
 
-                    <div class="amount-input-container">
+                <div class="amount-input-container">
                         <input type="number" id="pay-amount-large" value="1" class="big-amount-input">
                         <span class="currency-label">kr</span>
                     </div>
@@ -525,7 +526,7 @@
                     </div>
 
                     <div class="action-buttons-row">
-                        <div class="action-btn" onclick="app.showPaymentModal()">
+                        <div class="action-btn" onclick="app.startPaymentFromActiveAccount()">
                             <div class="icon-circle"><span class="material-icons-round" style="transform: rotate(-45deg);">send</span></div>
                             <span>Betale</span>
                         </div>
@@ -586,37 +587,6 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Payment Modal/Overlay -->
-            <div id="payment-modal" class="modal hidden">
-                <div class="modal-header">
-                    <button class="btn-icon" onclick="app.hidePaymentModal()"><span class="material-icons-round">close</span></button>
-                    <h2>Ny betaling</h2>
-                    <div style="width: 24px;"></div>
-                </div>
-                <div class="modal-content">
-                    <div class="input-group">
-                        <label>Fra konto</label>
-                        <select id="pay-from">
-                            <option value="21208">Visakort bulder (21 208 kr)</option>
-                            <option value="1">Konto 2 (1 kr)</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Til (navn eller kontonummer)</label>
-                        <input type="text" id="pay-to" placeholder="1234.56.78903">
-                    </div>
-                    <div class="input-group">
-                        <label>Beløp</label>
-                        <input type="number" id="pay-amount" placeholder="0,00">
-                    </div>
-                    <div class="input-group">
-                        <label>Melding / KID</label>
-                        <input type="text" id="pay-msg" placeholder="Valgfritt">
-                    </div>
-                    <button class="btn-large-primary" onclick="app.processPayment()">Betal</button>
-                </div>
-            </div>
             
         </main>
 
