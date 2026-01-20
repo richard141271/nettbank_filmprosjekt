@@ -21,21 +21,21 @@
                 </header>
                 <div class="content center-content" style="justify-content: flex-start; padding-top: 20px;">
                     <div class="menu-group" style="width: 100%;">
-                        <div class="menu-item payment-row">
-                            <span class="label">Fra</span>
-                            <div class="value-group">
-                                <span class="value" id="pay-from-display">Visakort bulder (21 208,14)</span>
-                                <span class="material-icons-round arrow">chevron_right</span>
-                            </div>
+                    <div class="menu-item payment-row" onclick="app.openAccountSelector('from')">
+                        <span class="label">Fra</span>
+                        <div class="value-group">
+                            <span class="value" id="pay-from-display">Visakort bulder (21 208,14)</span>
+                            <span class="material-icons-round arrow">chevron_right</span>
                         </div>
-                        <div class="menu-item payment-row">
-                            <span class="label">Til</span>
-                            <div class="value-group">
-                                <span class="value" id="pay-to-display">Sparekonto (521 182,00)</span>
-                                <span class="material-icons-round arrow">chevron_right</span>
-                            </div>
+                    </div>
+                    <div class="menu-item payment-row" onclick="app.openAccountSelector('to')">
+                        <span class="label">Til</span>
+                        <div class="value-group">
+                            <span class="value" id="pay-to-display">Sparekonto (521 182,00)</span>
+                            <span class="material-icons-round arrow">chevron_right</span>
                         </div>
-                        <div class="menu-item payment-row">
+                    </div>
+                    <div class="menu-item payment-row">
                             <span class="label">Melding</span>
                             <div class="value-group">
                                 <span class="value text-blue">Legg til</span>
@@ -644,6 +644,17 @@
             </a>
         </nav>
     </div>
+    <!-- Account Selector Modal -->
+    <div id="account-selector-modal" class="modal-overlay hidden" onclick="app.closeAccountSelector(event)">
+        <div class="modal-content-bottom">
+            <button class="close-btn" onclick="app.closeAccountSelector()"><span class="material-icons-round">close</span></button>
+            <h3 style="margin-bottom: 20px; color: var(--text-white);">Velg konto</h3>
+            <div id="account-selector-list" style="text-align: left;">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

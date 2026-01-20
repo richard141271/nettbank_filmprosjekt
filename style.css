@@ -527,7 +527,31 @@ p { color: var(--text-gray); font-size: 14px; margin: 0; }
     margin-bottom: 10px;
 }
 
-/* --- Bottom Nav --- */
+.account-selector-item {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.account-selector-item:last-child {
+    border-bottom: none;
+}
+
+.account-selector-item .acc-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-white);
+    display: block;
+}
+
+.account-selector-item .acc-balance {
+    font-size: 14px;
+    color: var(--text-gray);
+    margin-top: 4px;
+}
 .bottom-nav {
     position: fixed;
     bottom: 20px;

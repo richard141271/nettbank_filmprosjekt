@@ -22,15 +22,42 @@ const app = {
                 transactions: [
                     { name: 'Renteinntekt', date: '31.12', amount: 1, reserved: false, icon: 'trending_up' }
                 ]
+            },
+            '2': {
+                name: 'Sparekonto',
+                id: '1234.56.11111',
+                balance: 150000,
+                spent: 0,
+                transactions: [
+                     { name: 'Spareavtale', date: '15.01', amount: 5000, reserved: false, icon: 'savings' }
+                ]
+            },
+            '3': {
+                name: 'Bufferkonto',
+                id: '1234.56.22222',
+                balance: 25000,
+                spent: 0,
+                transactions: [
+                    { name: 'Overføring', date: '10.01', amount: 2000, reserved: false, icon: 'swap_horiz' }
+                ]
             }
         },
-        totalBalance: 21209,
-        historyStack: [] // To track navigation
+        totalBalance: 0, // Will be calculated
+        historyStack: [], // To track navigation
+        paymentState: {
+            fromAccount: '21208',
+            toAccount: '1'
+        }
     },
 
     init: function() {
+        this.calculateTotalBalance();
         this.setupNavigation();
         this.updateUI();
+    },
+
+    calculateTotalBalance: function() {
+         this.state.totalBalance = Object.values(this.state.accounts).reduce((sum, acc) => sum + acc.balance, 0);
     },
 
     setupNavigation: function() {
@@ -169,10 +196,8 @@ const app = {
         const amountInput = document.getElementById('pay-amount-large');
         const amount = parseFloat(amountInput.value.replace(/\s/g, '').replace(',', '.'));
         
-        // Hardcoded for demo: From Visa (21208) to Spare (1) or vice versa?
-        // In the screenshot, "Fra Visakort" is shown.
-        const fromAccount = '21208';
-        const toAccount = '1'; // Or just "Sparekonto"
+        const fromAccount = this.state.paymentState.fromAccount;
+        const toAccount = this.state.paymentState.toAccount;
 
         if (!amount || amount <= 0) {
             alert('Vennligst oppgi et gyldig beløp');
@@ -192,11 +217,11 @@ const app = {
             this.state.accounts[toAccount].balance += amount;
         }
         
-        this.state.totalBalance = Object.values(this.state.accounts).reduce((sum, acc) => sum + acc.balance, 0);
+        this.calculateTotalBalance();
         
         // Add fake transaction
         this.state.accounts[fromAccount].transactions.unshift({
-            name: 'Sparekonto', // Hardcoded for this view
+            name: this.state.accounts[toAccount] ? this.state.accounts[toAccount].name : 'Betaling',
             date: 'I dag',
             amount: -amount,
             reserved: false,
@@ -206,7 +231,7 @@ const app = {
         // Also add to receiving account if it exists
         if (this.state.accounts[toAccount]) {
              this.state.accounts[toAccount].transactions.unshift({
-                name: 'Fra Visakort',
+                name: 'Fra ' + this.state.accounts[fromAccount].name,
                 date: 'I dag',
                 amount: amount,
                 reserved: false,
@@ -256,15 +281,63 @@ const app = {
         }
 
         // Update Payment View Details (Fra/Til dropdowns)
+        const fromAcc = this.state.accounts[this.state.paymentState.fromAccount];
+        const toAcc = this.state.accounts[this.state.paymentState.toAccount];
+
         const payFromEl = document.getElementById('pay-from-display');
-        if (payFromEl) {
-            // Reconstruct the text: "Name (Balance)"
-            payFromEl.innerText = `${this.state.accounts['21208'].name} (${this.formatCurrency(this.state.accounts['21208'].balance)})`;
+        if (payFromEl && fromAcc) {
+            payFromEl.innerText = `${fromAcc.name} (${this.formatCurrency(fromAcc.balance)})`;
         }
+        
         const payToEl = document.getElementById('pay-to-display');
-        if (payToEl) {
-            payToEl.innerText = `${this.state.accounts['1'].name} (${this.formatCurrency(this.state.accounts['1'].balance)})`;
+        if (payToEl && toAcc) {
+            payToEl.innerText = `${toAcc.name} (${this.formatCurrency(toAcc.balance)})`;
         }
+    },
+
+    openAccountSelector: function(type) {
+        // type is 'from' or 'to'
+        this.selectorType = type;
+        const list = document.getElementById('account-selector-list');
+        list.innerHTML = '';
+
+        Object.keys(this.state.accounts).forEach(accId => {
+            const acc = this.state.accounts[accId];
+            
+            // Optional: Don't show same account in 'to' if selected in 'from'
+            // But for simplicity and self-transfer, we allow it, but maybe visually distinguish?
+            
+            const item = document.createElement('div');
+            item.className = 'account-selector-item';
+            item.innerHTML = `
+                <div>
+                    <span class="acc-name">${acc.name}</span>
+                    <span class="acc-balance">${this.formatCurrency(acc.balance)}</span>
+                </div>
+                ${(this.selectorType === 'from' && this.state.paymentState.fromAccount === accId) || 
+                  (this.selectorType === 'to' && this.state.paymentState.toAccount === accId) ? 
+                  '<span class="material-icons-round text-blue">check</span>' : ''}
+            `;
+            item.onclick = () => this.selectAccount(accId);
+            list.appendChild(item);
+        });
+
+        document.getElementById('account-selector-modal').classList.remove('hidden');
+    },
+
+    closeAccountSelector: function(event) {
+        if (event && event.target !== event.currentTarget && event.target.tagName !== 'BUTTON') return;
+        document.getElementById('account-selector-modal').classList.add('hidden');
+    },
+
+    selectAccount: function(accId) {
+        if (this.selectorType === 'from') {
+            this.state.paymentState.fromAccount = accId;
+        } else {
+            this.state.paymentState.toAccount = accId;
+        }
+        this.updateUI();
+        this.closeAccountSelector();
     },
 
     formatCurrency: function(value) {
