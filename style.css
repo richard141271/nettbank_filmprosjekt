@@ -1,21 +1,432 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #f4f4f4;
-    color: #333;
+:root {
+    --bg-color: #0f1422; /* Deep dark blue background */
+    --card-bg: #1c2235; /* Slightly lighter card background */
+    --primary-blue: #2b61ff; /* Bright blue for buttons/accents */
+    --accent-green: #65d672; /* Green for positive/savings */
+    --accent-red: #ff5e5e; /* Red for spending */
+    --text-white: #ffffff;
+    --text-gray: #a0a4b0;
+    --nav-bg: #151a2b; /* Bottom nav background */
+    --spacing-base: 16px;
+    --radius-card: 20px;
 }
 
-header {
-    background-color: #0056b3;
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-white);
+    overflow: hidden; /* Prevent body scroll, handle in view-container */
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 600px; /* Limit width on desktop */
+    margin: 0 auto;
+    background-color: var(--bg-color);
+    position: relative;
+}
+
+/* --- Typography --- */
+h1 { font-size: 20px; font-weight: 700; margin: 0; }
+h2 { font-size: 18px; font-weight: 700; margin: 0 0 8px 0; }
+h3 { font-size: 18px; font-weight: 500; margin: 0; }
+p { color: var(--text-gray); font-size: 14px; margin: 0; }
+
+.subtext { color: var(--text-gray); font-size: 14px; }
+.red-text { color: var(--accent-red); font-weight: 700; }
+.green-text { color: var(--accent-green); font-weight: 700; }
+
+/* --- Layout & Views --- */
+#view-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    background-color: var(--bg-color);
+    z-index: 10;
+}
+
+.view.active {
+    display: flex;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-base);
+    padding-bottom: 90px; /* Space for bottom nav */
+}
+
+/* --- Top Bar --- */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: var(--bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.profile-icon, .search-icon, .add-icon, .camera-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white);
+}
+
+/* --- Cards --- */
+.card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius-card);
+    padding: 20px;
+    margin-bottom: var(--spacing-base);
+}
+
+.info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
     color: white;
-    padding: 1rem;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-weight: 600;
+    margin-top: 12px;
+    align-self: flex-end;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    color: var(--text-white);
+    font-weight: 500;
+}
+
+/* --- Account Cards --- */
+.account-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.account-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 94, 94, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-red);
+    margin-right: 16px;
+}
+
+.account-details {
+    flex: 1;
+}
+
+.account-balance {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.account-balance .amount {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.account-balance .icon {
+    font-size: 16px;
+    color: var(--text-gray);
+    margin-top: 4px;
+}
+
+/* --- Spending Card --- */
+.spending-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.spending-amount {
+    margin: 10px 0;
+    font-size: 28px;
+}
+
+.spending-circles {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-color);
+}
+
+.circle.red { background-color: rgba(255, 94, 94, 0.2); color: var(--accent-red); border-color: var(--accent-red); }
+.circle.dark { background-color: var(--bg-color); color: var(--text-gray); border: 2px solid var(--text-gray); }
+
+/* --- Spare View --- */
+.total-saved {
+    text-align: center;
+    margin: 20px 0 40px 0;
+}
+
+.total-saved .label {
+    display: block;
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+.total-saved .amount-large {
+    font-size: 42px;
+    font-weight: 700;
+}
+
+.savings-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    color: var(--text-gray);
+    font-size: 14px;
+}
+
+.summary-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.savings-card {
+    background-size: cover;
+    background-position: center;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+}
+
+.savings-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: auto;
+}
+
+.savings-progress {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar .fill {
+    height: 100%;
+    background-color: var(--accent-green);
+}
+
+/* --- Betale View --- */
+.menu-group {
+    background-color: var(--card-bg);
+    border-radius: var(--radius-card);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.menu-item:last-child {
+    border-bottom: none;
+}
+
+.menu-item .icon {
+    margin-right: 16px;
+    color: var(--text-white);
+    font-size: 24px;
+    width: 24px;
     text-align: center;
 }
 
-main {
-    padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
+.menu-item .icon.italic { font-style: italic; font-weight: 900; font-family: serif; }
+.menu-item .icon.bold { font-weight: 900; }
+
+.menu-item .text {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* --- Bottom Nav --- */
+.bottom-nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 500px;
+    background-color: var(--nav-bg);
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-gray);
+    font-size: 10px;
+}
+
+.nav-item .icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.nav-item.active {
+    color: var(--text-white); /* Or pinkish red like in screenshot */
+}
+.nav-item.active .icon {
+    color: var(--accent-red);
+}
+
+/* --- Modals --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal.hidden {
+    transform: translateY(100%);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-white);
+    padding: 0;
+    cursor: pointer;
+}
+
+.modal-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    display: block;
+    color: var(--text-gray);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    background-color: var(--card-bg);
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    color: var(--text-white);
+    font-size: 18px;
+    outline: none;
+}
+
+.btn-large-primary {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.view.active .content > * {
+    animation: fadeIn 0.4s ease-out forwards;
 }

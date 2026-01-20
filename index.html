@@ -2,17 +2,267 @@
 <html lang="no">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nettbank Filmprosjekt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nettbank</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined|Material+Icons+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Velkommen til Nettbank Filmprosjekt</h1>
-    </header>
-    <main>
-        <p>Dette er startpunktet for prosjektet.</p>
-    </main>
+    <div class="app-container">
+        <!-- Views -->
+        <main id="view-container">
+            <!-- Hjem View -->
+            <section id="view-hjem" class="view active">
+                <header class="top-bar">
+                    <div class="profile-icon"><span class="material-icons-round">person</span></div>
+                    <h1>Hjem</h1>
+                    <div class="search-icon"><span class="material-icons-round">search</span></div>
+                </header>
+                <div class="content scrollable">
+                    <!-- Cards will go here -->
+                    <div class="card info-card">
+                        <h2>Nasjonal oppdatering på efaktura</h2>
+                        <p>Slipp å få faktura i posten</p>
+                        <button class="btn-primary small">Oppdater</button>
+                    </div>
+
+                    <div class="section-header">
+                        <span>Mine penger (<span id="total-balance">21 209</span>)</span>
+                        <span class="material-icons-round">arrow_forward</span>
+                    </div>
+
+                    <div class="card account-card">
+                        <div class="account-icon red-icon">
+                            <span class="material-icons-round">credit_card</span>
+                        </div>
+                        <div class="account-details">
+                            <h3>Visakort bulder</h3>
+                            <span class="subtext">7 601 å bruke</span>
+                        </div>
+                        <div class="account-balance">
+                            <span class="amount">21 208</span>
+                            <span class="icon"><span class="material-icons-round">payment</span></span>
+                        </div>
+                    </div>
+
+                    <div class="card account-card">
+                        <div class="account-icon red-icon">
+                            <span class="material-icons-round">account_balance_wallet</span>
+                        </div>
+                        <div class="account-details">
+                            <h3>Konto 2</h3>
+                            <span class="subtext">1 å bruke</span>
+                        </div>
+                        <div class="account-balance">
+                            <span class="amount">1</span>
+                        </div>
+                    </div>
+
+                    <div class="card spending-card">
+                        <h3>Pengebruk</h3>
+                        <div class="spending-amount">
+                            <span class="red-text">55 672 kr</span>
+                            <span class="subtext">av 17 039</span>
+                        </div>
+                        <div class="spending-circles">
+                            <div class="circle red"><span class="material-icons-outlined">shopping_cart</span></div>
+                            <div class="circle dark"><span class="material-icons-outlined">home</span></div>
+                            <div class="circle red"><span class="material-icons-outlined">sports_esports</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Spare View -->
+            <section id="view-spare" class="view">
+                <header class="top-bar">
+                    <div class="profile-icon"><span class="material-icons-round">person</span></div>
+                    <h1>Spare</h1>
+                    <div class="add-icon"><span class="material-icons-round">add</span></div>
+                </header>
+                <div class="content scrollable">
+                    <div class="total-saved">
+                        <span class="label">Totalt</span>
+                        <span class="amount-large">565 775</span>
+                    </div>
+                    
+                    <div class="savings-summary">
+                        <span>Sparekontoer</span>
+                        <div class="summary-right">
+                            <span>565 775</span>
+                            <span class="green-text">1 175 kr</span>
+                        </div>
+                    </div>
+
+                    <div class="savings-list">
+                        <!-- Sparekonto Card -->
+                        <div class="card savings-card" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1460317442991-0ec209397118?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');">
+                            <h3>Sparekonto</h3>
+                            <div class="savings-progress">
+                                <span>521 182 / 550 000 kr</span>
+                                <span>94 %</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="fill" style="width: 94%"></div>
+                            </div>
+                        </div>
+
+                         <!-- Husleie Card -->
+                         <div class="card savings-card" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1486325212027-8081e485255e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60');">
+                            <h3>Husleie</h3>
+                            <div class="savings-progress">
+                                <span>8 606 / 100 000 kr</span>
+                                <span>8 %</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="fill" style="width: 8%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Betale View -->
+            <section id="view-betale" class="view">
+                <header class="top-bar">
+                    <div class="profile-icon"><span class="material-icons-round">person</span></div>
+                    <h1>Betale</h1>
+                    <div class="camera-icon"><span class="material-icons-round">photo_camera</span></div>
+                </header>
+                <div class="content scrollable">
+                    <div class="menu-group">
+                        <div class="menu-item" onclick="app.showPaymentModal()">
+                            <span class="icon"><span class="material-icons-round" style="transform: rotate(-45deg);">send</span></span>
+                            <span class="text">Betale og overføre</span>
+                        </div>
+                        <div class="menu-item">
+                            <span class="icon"><span class="material-icons-round">public</span></span>
+                            <span class="text">Utenlandsbetaling</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-group">
+                        <div class="menu-item">
+                            <span class="icon italic">e</span>
+                            <span class="text">eFaktura</span>
+                        </div>
+                        <div class="menu-item">
+                            <span class="icon bold">A</span>
+                            <span class="text">AvtaleGiro</span>
+                        </div>
+                        <div class="menu-item" onclick="app.showForfall()">
+                            <span class="icon"><span class="material-icons-round">event_note</span></span>
+                            <span class="text">Forfallsoversikt</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-group">
+                        <div class="menu-item" onclick="app.showFasteOppdrag()">
+                            <span class="icon"><span class="material-icons-round" style="transform: rotate(-45deg);">call_made</span></span>
+                            <span class="text">Faste oppdrag</span>
+                        </div>
+                        <div class="menu-item">
+                            <span class="icon"><span class="material-icons-round" style="transform: rotate(-45deg);">call_made</span></span>
+                            <span class="text">Abonnement</span>
+                        </div>
+                        <div class="menu-item" onclick="app.showMottakere()">
+                            <span class="icon"><span class="material-icons-round">contact_page</span></span>
+                            <span class="text">Mottakere</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bolig View (Placeholder) -->
+            <section id="view-bolig" class="view">
+                <header class="top-bar">
+                    <h1>Bolig</h1>
+                </header>
+                <div class="content center-content">
+                    <p>Her kommer boliginformasjon</p>
+                </div>
+            </section>
+
+             <!-- Bulder View (Placeholder) -->
+             <section id="view-bulder" class="view">
+                <header class="top-bar">
+                    <h1>Bulder</h1>
+                </header>
+                <div class="content center-content">
+                    <p>Bulder profil</p>
+                </div>
+            </section>
+
+            <!-- Payment Modal/Overlay -->
+            <div id="payment-modal" class="modal hidden">
+                <div class="modal-header">
+                    <button class="btn-icon" onclick="app.hidePaymentModal()"><span class="material-icons-round">close</span></button>
+                    <h2>Ny betaling</h2>
+                    <div style="width: 24px;"></div>
+                </div>
+                <div class="modal-content">
+                    <div class="input-group">
+                        <label>Fra konto</label>
+                        <select id="pay-from">
+                            <option value="21208">Visakort bulder (21 208 kr)</option>
+                            <option value="1">Konto 2 (1 kr)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Til (navn eller kontonummer)</label>
+                        <input type="text" id="pay-to" placeholder="1234.56.78903">
+                    </div>
+                    <div class="input-group">
+                        <label>Beløp</label>
+                        <input type="number" id="pay-amount" placeholder="0,00">
+                    </div>
+                    <div class="input-group">
+                        <label>Melding / KID</label>
+                        <input type="text" id="pay-msg" placeholder="Valgfritt">
+                    </div>
+                    <button class="btn-large-primary" onclick="app.processPayment()">Betal</button>
+                </div>
+            </div>
+            
+            <!-- Generic Page Modal -->
+            <div id="generic-modal" class="modal hidden">
+                <div class="modal-header">
+                    <button class="btn-icon" onclick="app.hideGenericModal()"><span class="material-icons-round">arrow_back</span></button>
+                    <h2 id="generic-title">Tittel</h2>
+                    <div style="width: 24px;"></div>
+                </div>
+                <div class="modal-content" id="generic-content">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" data-target="view-hjem">
+                <span class="icon material-icons-round">play_arrow</span>
+                <span class="label">Hjem</span>
+            </a>
+            <a href="#" class="nav-item" data-target="view-spare">
+                <span class="icon material-icons-round">savings</span>
+                <span class="label">Spare</span>
+            </a>
+            <a href="#" class="nav-item" data-target="view-betale">
+                <span class="icon material-icons-round" style="transform: rotate(-45deg);">send</span> <!-- Using send as substitute for logo -->
+                <span class="label">Betale</span>
+            </a>
+            <a href="#" class="nav-item" data-target="view-bolig">
+                <span class="icon material-icons-round">home</span>
+                <span class="label">Bolig</span>
+            </a>
+            <a href="#" class="nav-item" data-target="view-bulder">
+                <span class="icon material-icons-round">flash_on</span>
+                <span class="label">Bulder</span>
+            </a>
+        </nav>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
